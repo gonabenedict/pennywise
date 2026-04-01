@@ -6,6 +6,27 @@ import { useClearMonthlyData } from "../../hooks/useClearMonthlyData";
 import { Sidebar } from '../../components/Sidebar';
 import './styles.css';
 
+const getCategoryIcon = (category) => {
+    const iconMap = {
+        'groceries': 'shopping_bag',
+        'food': 'restaurant',
+        'dining': 'restaurant',
+        'utilities': 'bolt',
+        'housing': 'home',
+        'rent': 'home',
+        'transport': 'directions_car',
+        'gas': 'directions_car',
+        'entertainment': 'theater_comedy',
+        'salary': 'payments',
+        'income': 'payments',
+        'shopping': 'shopping_cart',
+        'healthcare': 'local_hospital',
+        'education': 'school',
+    };
+    const key = category?.toLowerCase() || 'category';
+    return iconMap[key] || 'category';
+};
+
 export const ExpenseTracker = () => {
     const { transactions, transactionsTotals } = useGetTransactions();
     const { name, profilePhoto } = useGetUserInfo();
@@ -133,7 +154,6 @@ export const ExpenseTracker = () => {
                     <div className="flex justify-between items-end">
                         <div>
                             <h2 className="text-2xl font-headline font-bold text-on-surface">Spending Buckets</h2>
-                            <p className="text-sm text-on-surface-variant">Manage your monthly allocations</p>
                         </div>
                     </div>
                     
@@ -164,8 +184,8 @@ export const ExpenseTracker = () => {
                                 <div key={category.id} className="bg-surface-container-lowest p-6 rounded-xl group hover:shadow-lg transition-all border border-transparent hover:border-outline-variant/20">
                                     <div className="flex justify-between items-start mb-6">
                                         <div className={`w-12 h-12 ${colors.icon} rounded-lg flex items-center justify-center ${colors.text}`}>
-                                            <span className="material-symbols-outlined" data-icon={category.icon || 'category'}>
-                                                {category.icon || 'category'}
+                                            <span className="material-symbols-outlined">
+                                                {getCategoryIcon(category.name)}
                                             </span>
                                         </div>
                                         <div className="text-right">
