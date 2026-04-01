@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useGetTransactions } from "../../hooks/useGetTransactions";
 import { useGetUserInfo } from "../../hooks/useGetUserInfo";
 import { Sidebar } from '../../components/Sidebar';
+import './styles.css';
 
 const getCategoryIcon = (category) => {
     const iconMap = {
@@ -87,79 +88,78 @@ export const History = () => {
     const groupedTransactions = groupTransactionsByDate(filteredTransactions);
 
     return (
-        <div className="flex">
+        <div className="history-wrapper">
             <Sidebar />
-            <main className="ml-64 min-h-screen w-full">
+            <main className="history-main">
                 {/* Header */}
-                <header className="flex justify-between items-center w-full px-8 py-6 sticky top-0 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl z-40 border-b border-outline-variant/10">
-                    <h2 className="font-headline text-2xl font-semibold text-on-surface">Transaction History</h2>
-                    <div className="flex items-center gap-6">
-                        <div className="relative w-64">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+                <header className="history-header">
+                    <h2>Transaction History</h2>
+                    <div className="header-actions">
+                        <div className="search-box">
+                            <span className="search-icon material-symbols-outlined">search</span>
                             <input
-                                className="w-full bg-surface-container-high border border-outline-variant/20 rounded-lg pl-10 pr-4 py-2 text-sm text-on-surface placeholder-on-surface-variant focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all"
                                 placeholder="Find transactions..."
                                 type="text"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        <div className="flex items-center gap-4 text-on-surface-variant cursor-pointer">
-                            {profilePhoto && <img src={profilePhoto} alt="User Profile" className="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest" />}
+                        <div className="profile-section">
+                            {profilePhoto && <img src={profilePhoto} alt="User Profile" className="profile-photo" />}
                         </div>
                     </div>
                 </header>
 
                 {/* Content */}
-                <section className="px-8 py-10 max-w-6xl mx-auto">
+                <section className="history-content">
                     {/* Filters */}
                     {expenseTransactions.length > 0 && (
-                        <div className="flex items-center justify-between mb-8">
-                            <div className="flex gap-3">
-                                <button className="flex items-center gap-2 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full text-sm font-medium hover:opacity-80 transition-all">
-                                    <span className="material-symbols-outlined text-base">filter_list</span>
+                        <div className="filter-section">
+                            <div className="filter-buttons">
+                                <button className="filter-btn">
+                                    <span className="material-symbols-outlined">filter_list</span>
                                     Category
                                 </button>
-                                <button className="flex items-center gap-2 px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-full text-sm font-medium hover:bg-surface-container-high transition-all">
-                                    <span className="material-symbols-outlined text-base">calendar_month</span>
+                                <button className="filter-btn">
+                                    <span className="material-symbols-outlined">calendar_month</span>
                                     Last 30 Days
                                 </button>
-                                <button className="flex items-center gap-2 px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-full text-sm font-medium hover:bg-surface-container-high transition-all">
-                                    <span className="material-symbols-outlined text-base">swap_vert</span>
+                                <button className="filter-btn">
+                                    <span className="material-symbols-outlined">swap_vert</span>
                                     Sort
                                 </button>
                             </div>
-                            <p className="text-sm text-outline font-medium tracking-tight">Showing {filteredTransactions.length} transactions</p>
+                            <p className="transaction-count">Showing {filteredTransactions.length} transactions</p>
                         </div>
                     )}
 
                     {/* Transaction Groups */}
                     {filteredTransactions.length > 0 ? (
-                        <div className="space-y-12">
+                        <div className="transaction-groups">
                             {Object.entries(groupedTransactions).map(([dateLabel, txs]) => (
-                                <div key={dateLabel}>
-                                    <h3 className="font-headline text-sm font-bold tracking-widest uppercase text-outline mb-6 flex items-center gap-3">
+                                <div key={dateLabel} className="date-group">
+                                    <h3 className="date-label">
                                         {dateLabel}
-                                        <div className="h-[1px] flex-1 bg-outline-variant/20"></div>
+                                        <div className="date-divider"></div>
                                     </h3>
-                                    <div className="space-y-4">
+                                    <div className="transactions-in-group">
                                         {txs.map((transaction, index) => {
                                             const colors = getCategoryColor(transaction.category);
                                             const icon = getCategoryIcon(transaction.category);
                                             return (
-                                                <div key={index} className="group bg-surface-container-lowest p-5 rounded-xl flex items-center justify-between transition-all hover:bg-surface-container-low cursor-pointer border border-transparent hover:border-outline-variant/20">
-                                                    <div className="flex items-center gap-5">
-                                                        <div className={`w-12 h-12 ${colors.bg} flex items-center justify-center rounded-xl ${colors.text}`}>
+                                                <div key={index} className="transaction-item">
+                                                    <div className="transaction-left">
+                                                        <div className="transaction-icon">
                                                             <span className="material-symbols-outlined">{icon}</span>
                                                         </div>
-                                                        <div>
-                                                            <h4 className="font-semibold text-on-surface">{transaction.description}</h4>
-                                                            <p className="text-xs text-outline font-medium">{transaction.category} • {new Date(transaction.createdAt?.toDate ? transaction.createdAt.toDate() : transaction.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</p>
+                                                        <div className="transaction-details">
+                                                            <h4>{transaction.description}</h4>
+                                                            <p className="transaction-meta">{transaction.category} • {new Date(transaction.createdAt?.toDate ? transaction.createdAt.toDate() : transaction.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</p>
                                                         </div>
                                                     </div>
-                                                    <div className="text-right">
-                                                        <p className="font-headline text-lg font-bold text-on-surface">-${parseFloat(transaction.transactionAmount).toFixed(2)}</p>
-                                                        <p className="text-xs text-secondary font-medium">Completed</p>
+                                                    <div className="transaction-right">
+                                                        <p className="transaction-amount">-${parseFloat(transaction.transactionAmount).toFixed(2)}</p>
+                                                        <p className="transaction-status">Completed</p>
                                                     </div>
                                                 </div>
                                             );
@@ -169,25 +169,23 @@ export const History = () => {
                             ))}
 
                             {/* Export Section */}
-                            <div className="mt-16 bg-surface-container-low rounded-2xl p-8 flex items-center justify-between overflow-hidden relative">
-                                <div className="z-10 relative">
-                                    <h3 className="font-headline text-xl font-bold text-on-surface mb-2">Need a detailed report?</h3>
-                                    <p className="text-on-surface-variant max-w-sm">Export your transaction history in PDF or CSV format for your records.</p>
-                                    <button className="mt-6 px-6 py-3 bg-primary text-on-primary rounded-xl font-semibold text-sm hover:opacity-90 transition-all font-headline">
+                            <div className="export-section">
+                                <div className="export-content">
+                                    <h3>Need a detailed report?</h3>
+                                    <p>Export your transaction history in PDF or CSV format for your records.</p>
+                                    <button className="export-btn">
                                         Export Records
                                     </button>
                                 </div>
-                                <div className="absolute right-0 top-0 h-full w-1/3 opacity-20 pointer-events-none">
-                                    <div className="h-full w-full bg-gradient-to-l from-primary to-transparent"></div>
-                                </div>
-                                <span className="material-symbols-outlined text-[120px] absolute -right-4 -bottom-4 text-primary/5 select-none" style={{ fontVariationSettings: "'FILL' 1" }}>file_download</span>
+                                <div className="export-gradient"></div>
+                                <span className="export-icon material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>file_download</span>
                             </div>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-20 bg-surface-container-low rounded-2xl">
-                            <span className="material-symbols-outlined text-6xl text-on-surface-variant mb-4">inbox</span>
-                            <p className="text-lg text-on-surface-variant font-medium">No expense transactions yet</p>
-                            <p className="text-sm text-on-surface-variant">Start adding transactions to see them here</p>
+                        <div className="empty-state">
+                            <span className="empty-icon material-symbols-outlined">inbox</span>
+                            <p className="title">No expense transactions yet</p>
+                            <p className="subtitle">Start adding transactions to see them here</p>
                         </div>
                     )}
                 </section>

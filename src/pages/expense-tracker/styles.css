@@ -343,6 +343,255 @@
   letter-spacing: 0;
 }
 
+/* Page Wrapper */
+.page-wrapper {
+  padding: 2rem;
+}
+
+/* Header Section */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1.5rem;
+}
+
+.header-info h2 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1c1b1f;
+  letter-spacing: -0.02em;
+}
+
+.header-info p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #79747e;
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #79747e;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  padding-left: 2.5rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: #f5f5f5;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  width: 16rem;
+  color: #1c1b1f;
+}
+
+.search-input::placeholder {
+  color: #79747e;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 115, 119, 0.2);
+  border-color: #0d7377;
+  background-color: white;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #79747e;
+}
+
+.icon-button {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  border: none;
+  background: none;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-button:hover {
+  opacity: 0.7;
+}
+
+.icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Spending Buckets Section */
+.spending-section {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1c1b1f;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.category-bucket {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.category-bucket:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.bucket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.bucket-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.bucket-icon.primary {
+  background-color: #f5f5f5;
+  color: #0d7377;
+}
+
+.bucket-icon.secondary {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.bucket-icon.tertiary {
+  background-color: #f3e5f5;
+  color: #6a1b9a;
+}
+
+.bucket-icon.accent {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.bucket-remaining {
+  text-align: right;
+}
+
+.remaining-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #79747e;
+  margin-bottom: 0.25rem;
+}
+
+.remaining-amount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0d7377;
+}
+
+.remaining-amount.negative {
+  color: #c62828;
+}
+
+.bucket-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1c1b1f;
+  margin: 0 0 0.5rem 0;
+}
+
+.bucket-spending {
+  font-size: 0.875rem;
+  color: #79747e;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.progress-container {
+  position: relative;
+  height: 0.5rem;
+  width: 100%;
+  background-color: #f0f0f0;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #0d7377;
+  transition: width 1s ease;
+}
+
+.status-text {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: right;
+  color: #79747e;
+  font-style: italic;
+}
+
+.status-text.alert {
+  color: #c62828;
+}
+
 .no-budget-message {
   background-color: #f5f5f5;
   padding: 2rem;

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useGetTransactions } from "../../hooks/useGetTransactions";
+import { useMonthlyCheck } from "../../hooks/useMonthlyCheck";
 import { Sidebar } from '../../components/Sidebar';
+import { MonthlyPrompt } from '../../components/MonthlyPrompt';
 import './styles.css';
 
 const CATEGORY_ICONS = {
@@ -18,23 +20,87 @@ const CATEGORY_ICONS = {
 
 export const Planner = () => {
     const { transactionsTotals } = useGetTransactions();
-    const { income } = transactionsTotals;
+    const { isEndOfMonth, currentMonth, getCurrentMonthKey, saveCurrentMonth, setIsEndOfMonth } = useMonthlyCheck();
     
     const [categories, setCategories] = useState([]);
     const [draftSaved, setDraftSaved] = useState(false);
     const [message, setMessage] = useState('');
+    const [showMonthlyPrompt, setShowMonthlyPrompt] = useState(false);
+    const [previousMonthPlan, setPreviousMonthPlan] = useState(null);
 
     // Load draft from localStorage on mount
     useEffect(() => {
         const savedDraft = localStorage.getItem('budgetDraft');
+        const savedMonth = localStorage.getItem('currentMonth');
+        const currentMonthKey = getCurrentMonthKey();
+        
         if (savedDraft) {
             try {
-                setCategories(JSON.parse(savedDraft));
+                const draftData = JSON.parse(savedDraft);
+                // If this is a new month, save the previous plan and show prompt
+                if (savedMonth && savedMonth !== currentMonthKey && isEndOfMonth) {
+                    setPreviousMonthPlan(draftData);
+                    setShowMonthlyPrompt(true);
+                } else if (!savedMonth) {
+                    // First time using the app
+                    saveCurrentMonth();
+                    setCategories(draftData);
+                } else {
+                    // Same month
+                    setCategories(draftData);
+                }
             } catch (error) {
                 console.error("Error loading draft:", error);
             }
+        } else if (!savedMonth) {
+            saveCurrentMonth();
         }
-    }, []);
+    }, [currentMonth]);
+
+    const handleKeepPlan = () => {
+        // Archive previous month's plan
+        const previousMonth = localStorage.getItem('currentMonth');
+        if (previousMonthPlan && previousMonth) {
+            const archivedPlans = JSON.parse(localStorage.getItem('archivedPlans') || '{}');
+            archivedPlans[previousMonth] = previousMonthPlan;
+            localStorage.setItem('archivedPlans', JSON.stringify(archivedPlans));
+        }
+        
+        // Keep the same categories but reset for new month
+        const newCategories = previousMonthPlan.map(cat => ({
+            ...cat,
+            // Keep amounts but they start fresh for new month
+        }));
+        
+        setCategories(newCategories);
+        localStorage.setItem('budgetDraft', JSON.stringify(newCategories));
+        saveCurrentMonth();
+        setShowMonthlyPrompt(false);
+        setIsEndOfMonth(false);
+        setPreviousMonthPlan(null);
+        setMessage('✓ Plan carried forward to new month!');
+        setTimeout(() => setMessage(''), 3000);
+    };
+
+    const handleChangePlan = () => {
+        // Archive previous month's plan
+        const previousMonth = localStorage.getItem('currentMonth');
+        if (previousMonthPlan && previousMonth) {
+            const archivedPlans = JSON.parse(localStorage.getItem('archivedPlans') || '{}');
+            archivedPlans[previousMonth] = previousMonthPlan;
+            localStorage.setItem('archivedPlans', JSON.stringify(archivedPlans));
+        }
+        
+        // Start fresh with empty categories
+        setCategories([]);
+        localStorage.removeItem('budgetDraft');
+        saveCurrentMonth();
+        setShowMonthlyPrompt(false);
+        setIsEndOfMonth(false);
+        setPreviousMonthPlan(null);
+        setMessage('✓ Starting fresh with new month!');
+        setTimeout(() => setMessage(''), 3000);
+    };
 
     const addCategory = () => {
         const newCategory = {
@@ -80,21 +146,6 @@ export const Planner = () => {
         }, 3000);
     };
 
-    const discardDraft = () => {
-        if (categories.length === 0) {
-            setMessage('No draft to discard');
-            setTimeout(() => setMessage(''), 2000);
-            return;
-        }
-
-        if (window.confirm('Are you sure you want to discard this draft? This action cannot be undone.')) {
-            setCategories([]);
-            localStorage.removeItem('budgetDraft');
-            setMessage('Draft discarded');
-            setTimeout(() => setMessage(''), 2000);
-        }
-    };
-
     const totalIncome = categories
         .filter(cat => cat.type === 'income')
         .reduce((sum, cat) => sum + (parseFloat(cat.amount) || 0), 0);
@@ -114,6 +165,12 @@ export const Planner = () => {
     return (
         <div className="planner-wrapper">
             <Sidebar />
+            <MonthlyPrompt 
+                isOpen={showMonthlyPrompt}
+                currentMonth={previousMonthPlan ? localStorage.getItem('currentMonth') : currentMonth}
+                onKeepPlan={handleKeepPlan}
+                onChangePlan={handleChangePlan}
+            />
             <div className="planner-container">
                 <div className="planner-top-section">
                     <div className="planner-header">
@@ -122,13 +179,6 @@ export const Planner = () => {
                     </div>
 
                     <div className="planner-action-buttons">
-                        <button 
-                            className="discard-draft-btn"
-                            onClick={discardDraft}
-                            title="Discard Draft"
-                        >
-                            Discard Draft
-                        </button>
                         <button 
                             className="save-plan-btn"
                             onClick={saveDraft}

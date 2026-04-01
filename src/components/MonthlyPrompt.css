@@ -1,0 +1,80 @@
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Modal Box */
+.modal-box {
+  background-color: white;
+  border-radius: 1rem;
+  max-width: 28rem;
+  width: 100%;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1c1b1f;
+}
+
+.modal-description {
+  margin: 0 0 1.5rem 0;
+  color: #79747e;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Button Container */
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.modal-btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.modal-btn-primary {
+  background-color: #0d7377;
+  color: white;
+}
+
+.modal-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.modal-btn-secondary {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.modal-btn-secondary:hover {
+  opacity: 0.9;
+}
+
+/* Footer Text */
+.modal-footer {
+  margin-top: 1.5rem;
+  font-size: 0.625rem;
+  color: #79747e;
+  text-align: center;
+  line-height: 1.4;
+}
