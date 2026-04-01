@@ -5,6 +5,7 @@ import { useGetUserInfo } from "../../hooks/useGetUserInfo";
 import { signOut } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
 import { useNavigate } from 'react-router-dom';
+import './styles.css';
 
 export const ExpenseTracker = () => {
     const { addTransaction } = useAddTransaction();
@@ -39,23 +40,24 @@ export const ExpenseTracker = () => {
             <div className="container">
                 <h1> {name}'s Expense Tracker</h1>
                 <div className="balance">
-                    <h3> Your Balance</h3>
+                    <h3> Net Remaining</h3>
                     {balance >= 0 ? (
-                        <h2 style={{ color: 'green' }}>${balance.toFixed(2)}</h2>
+                        <h2>${balance.toFixed(2)}</h2>
                     ) : (
-                        <h2 style={{ color: 'red' }}>-${Math.abs(balance).toFixed(2)}</h2>
+                        <h2>-${Math.abs(balance).toFixed(2)}</h2>
                     )}
+                    <div className="progress-bar-container">
+                        <div className="progress-bar-fill" style={{ width: `${Math.min((balance / income) * 100, 100)}%` }}></div>
+                    </div>
                 </div>
-                <div className="summary">
                     <div className="income">
-                        <h4>Income</h4>
+                        <h4>Total Income</h4>
                         <p>${income.toFixed(2)}</p>
                     </div>
                     <div className="expenses">
-                        <h4> Expenses </h4>
+                        <h4> Total Spent </h4>
                         <p>${expenses.toFixed(2)}</p>
                     </div>
-                </div>
                 <form className="add-transaction" onSubmit={onSubmit} >
                     <input 
                         type="text" 
