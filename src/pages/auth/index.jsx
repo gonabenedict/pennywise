@@ -1,5 +1,7 @@
 import { auth, provider } from "../../config/firebase-config";
+import { db } from "../../config/firebase-config";
 import { signInWithPopup } from 'firebase/auth';
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate, Navigate} from "react-router-dom"; 
 import { useGetUserInfo } from "../../hooks/useGetUserInfo";
 
@@ -10,10 +12,23 @@ export const Auth = () => {
     const SignInWithGoogle = async () => {
         try {
             const results = await signInWithPopup(auth, provider);
+            const user = results.user;
+            
+            // Save user info to Firestore
+            await setDoc(doc(db, "users", user.uid), {
+                userID: user.uid,
+                email: user.email,
+                name: user.displayName,
+                profilePhoto: user.photoURL,
+                createdAt: serverTimestamp(),
+                lastLoginAt: serverTimestamp()
+            }, { merge: true }); // merge: true to update existing user without overwriting other fields
+            
             const authInfo = {
-                userID: results.user.uid,
-                name: results.user.displayName,
-                profilephoto: results.user.photoURL,
+                userID: user.uid,
+                email: user.email,
+                name: user.displayName,
+                profilePhoto: user.photoURL,
                 isAuth: true,
             }
             localStorage.setItem("auth", JSON.stringify(authInfo));

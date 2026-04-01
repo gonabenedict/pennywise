@@ -6,13 +6,14 @@ export const useAddTransaction = () => {
     const transactionCollectionRef = collection(db, "transactions");
     const { userID } = useGetUserInfo();
     
-    const addTransaction = async ({ description, transactionAmount, transactionType }) => {
+    const addTransaction = async ({ description, transactionAmount, transactionType, category = "other" }) => {
         try {
             await addDoc(transactionCollectionRef, {
                 userID,
                 description,
                 transactionAmount: Number(transactionAmount),
                 transactionType, 
+                category,
                 createdAt: serverTimestamp()
             });
         } catch (error) {
@@ -22,6 +23,7 @@ export const useAddTransaction = () => {
 
     return { addTransaction };
 };
+
 
 
   
