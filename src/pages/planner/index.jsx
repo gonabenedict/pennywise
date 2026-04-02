@@ -19,7 +19,6 @@ const CATEGORY_ICONS = {
 };
 
 export const Planner = () => {
-    const { transactionsTotals } = useGetTransactions();
     const { isEndOfMonth, currentMonth, getCurrentMonthKey, saveCurrentMonth, setIsEndOfMonth } = useMonthlyCheck();
     
     const [categories, setCategories] = useState([]);
@@ -55,7 +54,7 @@ export const Planner = () => {
         } else if (!savedMonth) {
             saveCurrentMonth();
         }
-    }, [currentMonth]);
+    }, [currentMonth, getCurrentMonthKey, isEndOfMonth, saveCurrentMonth]);
 
     const handleKeepPlan = () => {
         // Archive previous month's plan
@@ -156,7 +155,6 @@ export const Planner = () => {
         .reduce((sum, cat) => sum + (parseFloat(cat.amount) || 0), 0);
     
     const remaining = totalIncome - totalExpenses;
-    const allocationPercentage = totalIncome > 0 ? (totalExpenses / totalIncome) * 100 : 0;
 
     const getIconStyle = (categoryName) => {
         const key = categoryName.toLowerCase().split(' ')[0];

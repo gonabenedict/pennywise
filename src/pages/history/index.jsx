@@ -165,7 +165,6 @@ export const History = () => {
                                     </h3>
                                     <div className="transactions-in-group">
                                         {txs.map((transaction, index) => {
-                                            const colors = getCategoryColor(transaction.category);
                                             const icon = getCategoryIcon(transaction.category);
                                             return (
                                                 <div key={index} className="transaction-item">

@@ -30,7 +30,6 @@ const getCategoryIcon = (category) => {
 
 export const ExpenseTracker = () => {
     const { transactions, transactionsTotals } = useGetTransactions();
-    const { name, profilePhoto } = useGetUserInfo();
     const budgetPlan = useGetBudgetPlan();
     const { clearMonthlyData } = useClearMonthlyData();
     const { currentMonth } = useMonthlyCheck();
