@@ -331,7 +331,9 @@
 
   .quick-add-container {
     margin-left: 0;
-    padding: 1.5rem 1rem;
+    padding: 1rem;
+    max-width: 100%;
+    width: 100%;
   }
 
   .quick-add-header h1 {
@@ -339,13 +341,13 @@
   }
 
   .category-buttons {
-    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 0.75rem;
   }
 
   .category-btn {
-    padding: 1rem 0.5rem;
-    font-size: 0.8rem;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
   }
 
   .category-icon {
@@ -363,8 +365,13 @@
   }
 
   .amount-input {
-    font-size: 2.5rem;
-    width: 180px;
+    font-size: 2rem;
+    width: 100%;
+    max-width: 150px;
+  }
+
+  .confirm-btn {
+    width: 100%;
   }
 }
 

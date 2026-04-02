@@ -9,6 +9,7 @@
   margin-left: 22rem;
   display: flex;
   flex-direction: column;
+  width: calc(100% - 22rem);
 }
 
 .planner-content-wrapper {
@@ -660,6 +661,7 @@
 
   .planner-main {
     margin-left: 0;
+    width: 100%;
   }
 
   .planner-content-wrapper {

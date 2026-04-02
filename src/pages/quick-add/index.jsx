@@ -95,7 +95,7 @@ export const QuickAdd = () => {
         <div className="flex min-h-screen bg-surface">
             <Sidebar />
             
-            <main className="ml-64 min-h-screen flex flex-col items-center justify-center p-8 bg-surface w-full">
+            <main className="md:ml-64 min-h-screen flex flex-col items-center justify-center p-4 md:p-8 bg-surface w-full mt-16 md:mt-0">
                 {/* Header */}
                 <header className="w-full max-w-2xl mb-12 flex justify-between items-center px-4">
                     <div>
