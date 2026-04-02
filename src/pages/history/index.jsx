@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useGetTransactions } from "../../hooks/useGetTransactions";
 import { useGetUserInfo } from "../../hooks/useGetUserInfo";
+import { useDeleteTransaction } from "../../hooks/useDeleteTransaction";
 import { Sidebar } from '../../components/Sidebar';
 import './styles.css';
 
@@ -74,7 +75,11 @@ const groupTransactionsByDate = (transactions) => {
 export const History = () => {
     const { transactions } = useGetTransactions();
     const { profilePhoto } = useGetUserInfo();
+    const { deleteTransaction } = useDeleteTransaction();
     const [searchTerm, setSearchTerm] = useState('');
+    const [deletingId, setDeletingId] = useState(null);
+    const [deleteError, setDeleteError] = useState('');
+    const [deleteMessage, setDeleteMessage] = useState('');
 
     // Filter to show only expense transactions
     const expenseTransactions = transactions?.filter(tx => tx.transactionType === 'expense') || [];
@@ -86,6 +91,22 @@ export const History = () => {
     );
 
     const groupedTransactions = groupTransactionsByDate(filteredTransactions);
+
+    const handleDeleteTransaction = async (transactionId, description) => {
+        if (window.confirm(`Are you sure you want to delete the transaction "${description}"? This action cannot be undone.`)) {
+            setDeletingId(transactionId);
+            try {
+                await deleteTransaction(transactionId);
+                setDeleteMessage(`✓ Transaction deleted successfully!`);
+                setTimeout(() => setDeleteMessage(''), 3000);
+            } catch (error) {
+                setDeleteError(`✗ Error deleting transaction: ${error.message}`);
+                setTimeout(() => setDeleteError(''), 3000);
+            } finally {
+                setDeletingId(null);
+            }
+        }
+    };
 
     return (
         <div className="history-wrapper">
@@ -158,8 +179,18 @@ export const History = () => {
                                                         </div>
                                                     </div>
                                                     <div className="transaction-right">
-                                                        <p className="transaction-amount">-${parseFloat(transaction.transactionAmount).toFixed(2)}</p>
-                                                        <p className="transaction-status">Completed</p>
+                                                        <div className="transaction-details-right">
+                                                            <p className="transaction-amount">-${parseFloat(transaction.transactionAmount).toFixed(2)}</p>
+                                                            <p className="transaction-status">Completed</p>
+                                                        </div>
+                                                        <button 
+                                                            className="delete-btn"
+                                                            onClick={() => handleDeleteTransaction(transaction.id, transaction.description)}
+                                                            disabled={deletingId === transaction.id}
+                                                            title="Delete transaction"
+                                                        >
+                                                            <span className="material-symbols-outlined">delete</span>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             );
@@ -186,6 +217,18 @@ export const History = () => {
                             <span className="empty-icon material-symbols-outlined">inbox</span>
                             <p className="title">No expense transactions yet</p>
                             <p className="subtitle">Start adding transactions to see them here</p>
+                        </div>
+                    )}
+                    
+                    {deleteMessage && (
+                        <div className="message success">
+                            {deleteMessage}
+                        </div>
+                    )}
+                    
+                    {deleteError && (
+                        <div className="message error">
+                            {deleteError}
                         </div>
                     )}
                 </section>

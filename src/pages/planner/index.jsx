@@ -108,7 +108,8 @@ export const Planner = () => {
             name: '',
             amount: 0,
             icon: 'other',
-            type: 'expense'
+            type: 'expense',
+            description: ''
         };
         setCategories([...categories, newCategory]);
     };
@@ -162,6 +163,13 @@ export const Planner = () => {
         return CATEGORY_ICONS[key] || CATEGORY_ICONS['other'];
     };
 
+    const getFormattedMonth = () => {
+        if (!currentMonth) return '';
+        const [year, month] = currentMonth.split('-');
+        const date = new Date(year, parseInt(month) - 1);
+        return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    };
+
     return (
         <div className="planner-wrapper">
             <Sidebar />
@@ -171,14 +179,34 @@ export const Planner = () => {
                 onKeepPlan={handleKeepPlan}
                 onChangePlan={handleChangePlan}
             />
-            <div className="planner-container">
-                <div className="planner-top-section">
-                    <div className="planner-header">
-                        <h1>Budget Planner</h1>
-                        <p className="planner-subtitle">Manage your monthly budget across categories</p>
+            <div className="planner-main">
+                <header className="planner-top-bar">
+                    <div className="planner-title-section">
+                        <h2 className="planner-title">Monthly Planner</h2>
+                        <p className="planner-month-subtitle">Drafting budget for {getFormattedMonth()}</p>
                     </div>
+                    <div className="planner-header-actions">
+                        <div className="planner-search-box">
+                            <span className="planner-search-icon material-symbols-outlined">search</span>
+                            <input 
+                                className="planner-search-input"
+                                placeholder="Search categories..." 
+                                type="text"
+                            />
+                        </div>
+                        <div className="planner-icon-buttons">
+                            <button className="planner-icon-btn" title="Notifications">
+                                <span className="material-symbols-outlined">notifications</span>
+                            </button>
+                            <button className="planner-icon-btn" title="Settings">
+                                <span className="material-symbols-outlined">settings</span>
+                            </button>
+                        </div>
+                    </div>
+                </header>
 
-                    <div className="planner-action-buttons">
+                <div className="planner-content-wrapper">
+                    <div className="planner-save-btn-container">
                         <button 
                             className="save-plan-btn"
                             onClick={saveDraft}
@@ -187,9 +215,8 @@ export const Planner = () => {
                             Save Plan
                         </button>
                     </div>
-                </div>
 
-                <div className="planner-content">
+                    <div className="planner-content">
                     <div className="consolidated-overview">
                         <div className="overview-content">
                             <p className="overview-label">CONSOLIDATED OVERVIEW</p>
@@ -253,6 +280,14 @@ export const Planner = () => {
                                                     className="category-name-input"
                                                 />
 
+                                                <input
+                                                    type="text"
+                                                    placeholder="Description (optional)"
+                                                    value={category.description || ''}
+                                                    onChange={(e) => updateCategory(category.id, 'description', e.target.value)}
+                                                    className="category-description-input"
+                                                />
+
                                                 <div className="type-toggle">
                                                     <button
                                                         className={`type-btn ${category.type === 'income' ? 'active' : ''}`}
@@ -302,6 +337,7 @@ export const Planner = () => {
                             {message}
                         </div>
                     )}
+                    </div>
                 </div>
             </div>
         </div>

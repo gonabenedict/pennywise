@@ -2,6 +2,7 @@
 .history-wrapper {
   display: flex;
   min-height: 100vh;
+  background-color: white;
 }
 
 .history-main {
@@ -19,17 +20,16 @@
   padding: 1.5rem 2rem;
   position: sticky;
   top: 0;
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
+  background-color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   z-index: 40;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .history-header h2 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1c1b1f;
+  color: #0d7377;
 }
 
 .header-actions {
@@ -233,6 +233,15 @@
 
 .transaction-right {
   text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.transaction-details-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .transaction-amount {
@@ -490,6 +499,71 @@
   margin: 0;
   font-size: 0.875rem;
   font-weight: 500;
+}
+
+/* Delete Button */
+.delete-btn {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  margin-left: 1rem;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background-color: rgba(211, 47, 47, 0.1);
+  color: #b71c1c;
+}
+
+.delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.delete-btn span {
+  font-size: 1.25rem;
+}
+
+/* Message Styles */
+.message {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  z-index: 50;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.message.success {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  border: 1px solid #81c784;
+}
+
+.message.error {
+  background-color: #ffcdd2;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
 }
 
 /* Responsive Design */
