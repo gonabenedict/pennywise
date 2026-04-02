@@ -706,15 +706,43 @@
     font-size: 1.25rem;
   }
 }
-
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .expense-tracker {
     margin-left: 0;
     padding: 1rem;
+    padding-top: 4rem;
   }
 
   .expense-tracker-wrapper {
     flex-direction: column;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .header-info h2 {
+    font-size: 1.25rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .search-input {
+    width: 100%;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }

@@ -56,7 +56,7 @@ export const Sidebar = () => {
       {isMobile && (
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="fixed top-4 left-4 z-50 md:hidden bg-primary text-white p-2 rounded-lg hover:opacity-90 transition-opacity"
+          className="fixed top-4 left-4 z-[9999] md:hidden bg-primary text-white p-2 rounded-lg hover:opacity-90 transition-opacity"
           title="Toggle Menu"
         >
           <span className="material-symbols-outlined">{isOpen ? 'close' : 'menu'}</span>
