@@ -651,3 +651,15 @@
     font-size: 1.75rem;
   }
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .planner-wrapper {
+    flex-direction: column;
+  }
+
+  .planner {
+    margin-left: 0;
+    padding: 1rem;
+  }
+}

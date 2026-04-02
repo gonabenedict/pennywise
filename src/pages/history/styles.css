@@ -688,3 +688,10 @@
     font-size: 0.75rem;
   }
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .history-main {
+    margin-left: 0;
+  }
+}

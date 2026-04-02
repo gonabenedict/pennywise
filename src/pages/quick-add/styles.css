@@ -426,3 +426,15 @@
     margin-top: 0.75rem;
   }
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .quick-add-wrapper {
+    flex-direction: column;
+  }
+
+  .quick-add {
+    margin-left: 0;
+    padding: 1rem;
+  }
+}

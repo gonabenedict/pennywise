@@ -706,3 +706,15 @@
     font-size: 1.25rem;
   }
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .expense-tracker {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .expense-tracker-wrapper {
+    flex-direction: column;
+  }
+}
