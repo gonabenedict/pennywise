@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useGetTransactions } from "../../hooks/useGetTransactions";
 import { useMonthlyCheck } from "../../hooks/useMonthlyCheck";
 import { Sidebar } from '../../components/Sidebar';
 import { MonthlyPrompt } from '../../components/MonthlyPrompt';

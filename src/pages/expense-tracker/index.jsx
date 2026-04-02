@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useGetTransactions } from "../../hooks/useGetTransactions";
-import { useGetUserInfo } from "../../hooks/useGetUserInfo";
 import { useGetBudgetPlan } from "../../hooks/useGetBudgetPlan";
 import { useClearMonthlyData } from "../../hooks/useClearMonthlyData";
 import { useMonthlyCheck } from "../../hooks/useMonthlyCheck";

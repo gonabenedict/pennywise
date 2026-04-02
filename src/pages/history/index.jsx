@@ -26,23 +26,6 @@ const getCategoryIcon = (category) => {
     return iconMap[key] || 'category';
 };
 
-const getCategoryColor = (category) => {
-    const colorMap = {
-        'Groceries': { bg: 'bg-secondary-container', text: 'text-on-secondary-container' },
-        'Food': { bg: 'bg-secondary-container', text: 'text-on-secondary-container' },
-        'Dining': { bg: 'bg-surface-container-highest', text: 'text-primary' },
-        'Utilities': { bg: 'bg-tertiary-fixed', text: 'text-on-tertiary-fixed-variant' },
-        'Housing': { bg: 'bg-surface-container-highest', text: 'text-primary' },
-        'Rent': { bg: 'bg-surface-container-highest', text: 'text-primary' },
-        'Transport': { bg: 'bg-secondary-fixed-dim/40', text: 'text-on-secondary-fixed-variant' },
-        'Gas': { bg: 'bg-secondary-fixed-dim/40', text: 'text-on-secondary-fixed-variant' },
-        'Entertainment': { bg: 'bg-error-container/40', text: 'text-error' },
-        'Salary': { bg: 'bg-primary-container/10', text: 'text-primary' },
-        'Income': { bg: 'bg-primary-container/10', text: 'text-primary' },
-    };
-    return colorMap[category] || { bg: 'bg-surface-container-low', text: 'text-on-surface' };
-};
-
 const groupTransactionsByDate = (transactions) => {
     const groups = {};
     const today = new Date();
