@@ -1,4 +1,4 @@
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import { useGetUserInfo } from "./useGetUserInfo";
 
@@ -17,7 +17,7 @@ export const useSaveBudgetPlan = () => {
                 userID,
                 monthKey,
                 categories,
-                updatedAt: new Date(),
+                updatedAt: serverTimestamp(),
             }, { merge: true });
             return true;
         } catch (error) {
