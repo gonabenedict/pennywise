@@ -20,7 +20,7 @@ const categoryIcons = {
 
 export const QuickAdd = () => {
     const { addTransaction } = useAddTransaction();
-    const allBudgetCategories = useGetBudgetPlan();
+    const { categories: allBudgetCategories, isLoading } = useGetBudgetPlan();
     const navigate = useNavigate();
     
     // Filter to only show EXPENSE categories in Quick Add
@@ -30,7 +30,7 @@ export const QuickAdd = () => {
     const [selectedCategory, setSelectedCategory] = useState(budgetCategories.length > 0 ? budgetCategories[0].name : "");
     const [note, setNote] = useState('');
     const [message, setMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const getCategoryIcon = (categoryName) => {
         const key = categoryName.toLowerCase();
