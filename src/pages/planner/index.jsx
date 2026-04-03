@@ -141,7 +141,7 @@ export const Planner = () => {
         setTimeout(() => setMessage(''), 3000);
     };
 
-    const addCategory = () => {
+    const addCategory = async () => {
         const newCategory = {
             id: Date.now(),
             name: '',
@@ -150,7 +150,20 @@ export const Planner = () => {
             type: 'expense',
             description: ''
         };
-        setCategories([...categories, newCategory]);
+        const updatedCategories = [...categories, newCategory];
+        setCategories(updatedCategories);
+        
+        // Auto-save to Firebase when a new category is added
+        try {
+            const success = await saveBudgetPlan(updatedCategories, getCurrentMonthKey());
+            if (success) {
+                localStorage.setItem('budgetDraft', JSON.stringify(updatedCategories));
+                console.log('New category added and saved to Firebase');
+            }
+        } catch (error) {
+            console.error('Error auto-saving new category:', error);
+            // Still keep the category in local state even if save fails
+        }
     };
 
     const removeCategory = async (id) => {
