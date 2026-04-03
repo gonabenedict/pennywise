@@ -86,7 +86,7 @@ export const Planner = () => {
         };
 
         loadBudgetPlan();
-    }, [currentMonth, getCurrentMonthKey, isEndOfMonth, saveCurrentMonth, getBudgetPlan]);
+    }, [currentMonth, isEndOfMonth]);
 
     const handleKeepPlan = async () => {
         // Archive previous month's plan
@@ -141,7 +141,7 @@ export const Planner = () => {
         setTimeout(() => setMessage(''), 3000);
     };
 
-    const addCategory = async () => {
+    const addCategory = () => {
         const newCategory = {
             id: Date.now(),
             name: '',
@@ -152,41 +152,13 @@ export const Planner = () => {
         };
         const updatedCategories = [...categories, newCategory];
         setCategories(updatedCategories);
-        
-        // Auto-save to Firebase when a new category is added
-        try {
-            const success = await saveBudgetPlan(updatedCategories, getCurrentMonthKey());
-            if (success) {
-                localStorage.setItem('budgetDraft', JSON.stringify(updatedCategories));
-                console.log('New category added and saved to Firebase');
-            }
-        } catch (error) {
-            console.error('Error auto-saving new category:', error);
-            // Still keep the category in local state even if save fails
-        }
+        // Category will be saved to Firebase when user clicks "Save Plan" button
     };
 
-    const removeCategory = async (id) => {
+    const removeCategory = (id) => {
         const updatedCategories = categories.filter(cat => cat.id !== id);
         setCategories(updatedCategories);
-        
-        // Save the updated categories to Firebase
-        try {
-            const success = await saveBudgetPlan(updatedCategories, getCurrentMonthKey());
-            if (success) {
-                // Also update localStorage for offline support
-                localStorage.setItem('budgetDraft', JSON.stringify(updatedCategories));
-                setMessage('✓ Category deleted successfully!');
-                setTimeout(() => setMessage(''), 2000);
-            } else {
-                setMessage('⚠ Category deleted locally, but failed to sync with database');
-                setTimeout(() => setMessage(''), 2000);
-            }
-        } catch (error) {
-            console.error('Error deleting category:', error);
-            setMessage('⚠ Category deleted locally, but failed to sync with database');
-            setTimeout(() => setMessage(''), 2000);
-        }
+        // Category deletion will be saved to Firebase when user clicks "Save Plan" button
     };
 
     const updateCategory = (id, field, value) => {
@@ -194,22 +166,7 @@ export const Planner = () => {
             cat.id === id ? { ...cat, [field]: value } : cat
         );
         setCategories(updatedCategories);
-        
-        // Auto-save to Firebase when category is updated
-        // Use a small debounce to avoid too many database calls
-        clearTimeout(window.updateCategoryTimeout);
-        window.updateCategoryTimeout = setTimeout(async () => {
-            try {
-                const success = await saveBudgetPlan(updatedCategories, getCurrentMonthKey());
-                if (success) {
-                    // Also update localStorage for offline support
-                    localStorage.setItem('budgetDraft', JSON.stringify(updatedCategories));
-                    console.log('Category updated and saved to Firebase');
-                }
-            } catch (error) {
-                console.error('Error auto-saving category update:', error);
-            }
-        }, 1000); // Wait 1 second after last edit before saving
+        // Updates are saved when user clicks "Save Plan" button, not on every keystroke
     };
 
     const saveDraft = async () => {
