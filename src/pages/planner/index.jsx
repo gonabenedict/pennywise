@@ -20,9 +20,15 @@ const CATEGORY_ICONS = {
 };
 
 export const Planner = () => {
-    const { isEndOfMonth, currentMonth, getCurrentMonthKey, saveCurrentMonth, setIsEndOfMonth } = useMonthlyCheck();
+    const { isEndOfMonth, currentMonth, setIsEndOfMonth } = useMonthlyCheck();
     const { saveBudgetPlan } = useSaveBudgetPlan();
     const { getBudgetPlan } = useGetBudgetPlanFromDB();
+    
+    // Helper function to calculate current month key
+    const getMonthKey = () => {
+        const today = new Date();
+        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+    };
     
     const [categories, setCategories] = useState([]);
     const [draftSaved, setDraftSaved] = useState(false);
@@ -30,11 +36,10 @@ export const Planner = () => {
     const [showMonthlyPrompt, setShowMonthlyPrompt] = useState(false);
     const [previousMonthPlan, setPreviousMonthPlan] = useState(null);
 
-    // Load draft from Firebase on mount
     useEffect(() => {
         const loadBudgetPlan = async () => {
             const savedMonth = localStorage.getItem('currentMonth');
-            const currentMonthKey = getCurrentMonthKey();
+            const currentMonthKey = getMonthKey();
             
             try {
                 // Try to fetch from Firebase first
@@ -47,7 +52,7 @@ export const Planner = () => {
                         setShowMonthlyPrompt(true);
                     } else if (!savedMonth) {
                         // First time using the app
-                        saveCurrentMonth();
+                        localStorage.setItem('currentMonth', currentMonthKey);
                         setCategories(firebaseData);
                     } else {
                         // Same month
@@ -55,7 +60,7 @@ export const Planner = () => {
                     }
                 } else if (!savedMonth) {
                     // No Firebase data, start fresh
-                    saveCurrentMonth();
+                    localStorage.setItem('currentMonth', currentMonthKey);
                     setCategories([]);
                 } else {
                     // Try fallback to localStorage for offline support
@@ -86,6 +91,7 @@ export const Planner = () => {
         };
 
         loadBudgetPlan();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentMonth, isEndOfMonth]);
 
     const handleKeepPlan = async () => {
@@ -107,9 +113,8 @@ export const Planner = () => {
         
         // Save to both localStorage and Firebase
         localStorage.setItem('budgetDraft', JSON.stringify(newCategories));
-        await saveBudgetPlan(newCategories, getCurrentMonthKey());
-        
-        saveCurrentMonth();
+        localStorage.setItem('currentMonth', getMonthKey());
+        await saveBudgetPlan(newCategories, getMonthKey());
         setShowMonthlyPrompt(false);
         setIsEndOfMonth(false);
         setPreviousMonthPlan(null);
@@ -131,9 +136,8 @@ export const Planner = () => {
         localStorage.removeItem('budgetDraft');
         
         // Clear Firebase data for this month
-        await saveBudgetPlan([], getCurrentMonthKey());
-        
-        saveCurrentMonth();
+        await saveBudgetPlan([], getMonthKey());
+        localStorage.setItem('currentMonth', getMonthKey());
         setShowMonthlyPrompt(false);
         setIsEndOfMonth(false);
         setPreviousMonthPlan(null);
@@ -187,7 +191,7 @@ export const Planner = () => {
         localStorage.setItem('budgetDraft', JSON.stringify(categories));
         
         try {
-            const success = await saveBudgetPlan(categories, getCurrentMonthKey());
+            const success = await saveBudgetPlan(categories, getMonthKey());
             if (success) {
                 setMessage('✓ Budget draft saved successfully!');
             } else {
