@@ -82,8 +82,6 @@ export const Planner = () => {
                         console.error("Error parsing localStorage draft:", parseError);
                     }
                 }
-            } finally {
-                setIsLoading(false);
             }
         };
 
