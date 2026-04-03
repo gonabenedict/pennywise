@@ -30,7 +30,6 @@ export const QuickAdd = () => {
     const [selectedCategory, setSelectedCategory] = useState(budgetCategories.length > 0 ? budgetCategories[0].name : "");
     const [note, setNote] = useState('');
     const [message, setMessage] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const getCategoryIcon = (categoryName) => {
         const key = categoryName.toLowerCase();
@@ -64,7 +63,6 @@ export const QuickAdd = () => {
         const categoryObj = allBudgetCategories.find(cat => cat.name === selectedCategory);
         const transactionType = categoryObj?.type || 'expense';
 
-        setIsSubmitting(true);
         try {
             await addTransaction({
                 description: note || selectedCategory,
@@ -82,8 +80,6 @@ export const QuickAdd = () => {
         } catch (error) {
             setMessage('✗ Error adding transaction: ' + error.message);
             setTimeout(() => setMessage(''), 3000);
-        } finally {
-            setIsSubmitting(false);
         }
     };
 

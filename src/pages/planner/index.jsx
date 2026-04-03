@@ -29,7 +29,6 @@ export const Planner = () => {
     const [message, setMessage] = useState('');
     const [showMonthlyPrompt, setShowMonthlyPrompt] = useState(false);
     const [previousMonthPlan, setPreviousMonthPlan] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
 
     // Load draft from Firebase on mount
     useEffect(() => {
