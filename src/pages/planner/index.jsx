@@ -153,14 +153,50 @@ export const Planner = () => {
         setCategories([...categories, newCategory]);
     };
 
-    const removeCategory = (id) => {
-        setCategories(categories.filter(cat => cat.id !== id));
+    const removeCategory = async (id) => {
+        const updatedCategories = categories.filter(cat => cat.id !== id);
+        setCategories(updatedCategories);
+        
+        // Save the updated categories to Firebase
+        try {
+            const success = await saveBudgetPlan(updatedCategories, getCurrentMonthKey());
+            if (success) {
+                // Also update localStorage for offline support
+                localStorage.setItem('budgetDraft', JSON.stringify(updatedCategories));
+                setMessage('✓ Category deleted successfully!');
+                setTimeout(() => setMessage(''), 2000);
+            } else {
+                setMessage('⚠ Category deleted locally, but failed to sync with database');
+                setTimeout(() => setMessage(''), 2000);
+            }
+        } catch (error) {
+            console.error('Error deleting category:', error);
+            setMessage('⚠ Category deleted locally, but failed to sync with database');
+            setTimeout(() => setMessage(''), 2000);
+        }
     };
 
     const updateCategory = (id, field, value) => {
-        setCategories(categories.map(cat => 
+        const updatedCategories = categories.map(cat => 
             cat.id === id ? { ...cat, [field]: value } : cat
-        ));
+        );
+        setCategories(updatedCategories);
+        
+        // Auto-save to Firebase when category is updated
+        // Use a small debounce to avoid too many database calls
+        clearTimeout(window.updateCategoryTimeout);
+        window.updateCategoryTimeout = setTimeout(async () => {
+            try {
+                const success = await saveBudgetPlan(updatedCategories, getCurrentMonthKey());
+                if (success) {
+                    // Also update localStorage for offline support
+                    localStorage.setItem('budgetDraft', JSON.stringify(updatedCategories));
+                    console.log('Category updated and saved to Firebase');
+                }
+            } catch (error) {
+                console.error('Error auto-saving category update:', error);
+            }
+        }, 1000); // Wait 1 second after last edit before saving
     };
 
     const saveDraft = async () => {
