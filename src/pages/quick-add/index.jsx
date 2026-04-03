@@ -64,7 +64,7 @@ export const QuickAdd = () => {
         const categoryObj = allBudgetCategories.find(cat => cat.name === selectedCategory);
         const transactionType = categoryObj?.type || 'expense';
 
-        setIsLoading(true);
+        setIsSubmitting(true);
         try {
             await addTransaction({
                 description: note || selectedCategory,
@@ -83,7 +83,7 @@ export const QuickAdd = () => {
             setMessage('✗ Error adding transaction: ' + error.message);
             setTimeout(() => setMessage(''), 3000);
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
